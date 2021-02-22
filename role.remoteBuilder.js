@@ -51,7 +51,7 @@ module.exports = {
                     if (creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(droppedEnergy);
                     } else {
-                        console.log(creep.name + ' found ' + droppedEnergy.energy + ' energy at', droppedEnergy.pos);
+                        console.log(`${creep.name} found ${droppedEnergy.energy} energy at ${droppedEnergy.pos}`);
                     }
                 }
                 else {

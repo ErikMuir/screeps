@@ -92,7 +92,7 @@
             : (_.max(this.creeps(role).map(c => parseInt(c.memory.serial) || 0)) + 1);
     },
     status: function (role, room) {
-	    return role + ": " + this.count(role, room) + "/" + this[role].min;
+	    return `${role}: ${this.count(role, room)}/${this[role].min}`;
     },
     percentage: function (role, room) {
         return this.count(role, room) / _.sum(Game.creeps, (c) => c.memory.roleType === this[role].roleType);

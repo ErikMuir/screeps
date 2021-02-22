@@ -4,7 +4,7 @@ StructureTower.prototype.defend =
         var target = this.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if (target != undefined) {
             this.attack(target);
-            console.log("The tower just attacked enemy creep: " + target);
+            console.log(`The tower just attacked enemy creep: ${target}`);
             return;
         }
 

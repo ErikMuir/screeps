@@ -4,14 +4,14 @@
         // get source
         let source = Game.getObjectById(creep.memory.sourceId);
         if (source == undefined) {
-            console.log(creep.name + " could not find his source!");
+            console.log(`${creep.name} could not find his source!`);
             return;
         }
 
         // get container
         let container = Game.getObjectById(creep.memory.containerId);
         if (container == undefined) {
-            console.log(creep.name + " could not find his container!");
+            console.log(`${creep.name} could not find his container!`);
             return;
         }
 

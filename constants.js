@@ -33,7 +33,7 @@
             case -12: return 'ERR_NO_BODYPART';
             case -14: return 'ERR_RCL_NOT_ENOUGH';
             case -15: return 'ERR_GCL_NOT_ENOUGH';
-            default: return 'Unknown code: ' + code;
+            default: return `Unknown code: ${code}`;
         }
     },
     BODYPART_COST: {
@@ -58,7 +58,7 @@
             case 1: return 'primary';
             case 2: return 'secondary';
             case 3: return 'remote';
-            default: return 'Unknown core type: ' + type;
+            default: return `Unknown core type: ${type}`;
         }
     }
 };

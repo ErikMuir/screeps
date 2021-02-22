@@ -33,7 +33,7 @@
             if (creep.attack(enemies[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(enemies[0]);
             } else {
-                console.log(creep.name + " just attacked enemy creep: " + enemies[0]);
+                console.log(`${creep.name} just attacked enemy creep: ${enemies[0]}`);
             }
         }
     }

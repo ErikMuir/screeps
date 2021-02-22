@@ -206,9 +206,9 @@ StructureSpawn.prototype.createCustomCreep =
 
         if (body.length) {
             var nextSerial = Roles.nextSerial(role);
-            return this.createCreep(body, role + nextSerial,
+            return this.createCreep(body, `${role}${nextSerial}`,
                 { 
-                    role: role, 
+                    role, 
                     working: false, 
                     serial: nextSerial,
                     roleType: Roles[role].roleType
@@ -236,9 +236,9 @@ StructureSpawn.prototype.createLorry =
 
         if (body.length) {
             var nextSerial = Roles.nextSerial(role);
-            return this.createCreep(body, role + nextSerial,
+            return this.createCreep(body, `${role}${nextSerial}`,
                 { 
-                    role: role, 
+                    role, 
                     working: false, 
                     serial: nextSerial,
                     roleType: Roles.lorry.roleType
@@ -252,6 +252,7 @@ StructureSpawn.prototype.createLorry =
 // createAttacker
 StructureSpawn.prototype.createAttacker =
     function (energy) {
+        const role = 'attacker';
         var body = [];
         var numberOfParts = Math.floor(energy / 210);
         numberOfParts = Math.min(numberOfParts, Math.floor(50 / 3));
@@ -264,10 +265,10 @@ StructureSpawn.prototype.createAttacker =
         }       
 
         if (body.length) {
-            var nextSerial = Roles.nextSerial('attacker');
-            return this.createCreep(body, 'attacker' + nextSerial,
+            var nextSerial = Roles.nextSerial(role);
+            return this.createCreep(body, `${role}${nextSerial}`,
                 { 
-                    role: 'attacker', 
+                    role, 
                     working: false, 
                     serial: nextSerial,
                     roleType: Roles.attacker.roleType
@@ -281,29 +282,31 @@ StructureSpawn.prototype.createAttacker =
 // createMiner
 StructureSpawn.prototype.createMiner =
     function (sourceId, containerId) {
-        var nextSerial = Roles.nextSerial('miner');
-        return this.createCreep(Roles.miner.body, 'miner' + nextSerial,
+        const role = 'miner';
+        var nextSerial = Roles.nextSerial(role);
+        return this.createCreep(Roles.miner.body, `${role}${nextSerial}`,
             { 
-                role: 'miner', 
+                role, 
                 working: false, 
                 serial: nextSerial, 
                 roleType: Roles.miner.roleType,
-                sourceId: sourceId, 
-                containerId: containerId 
+                sourceId, 
+                containerId 
             });
     };
 
 // createClaimer
 StructureSpawn.prototype.createClaimer = 
     function (target) {
-        var nextSerial = Roles.nextSerial('claimer');
-        return this.createCreep(Roles.claimer.body, 'claimer' + nextSerial,
+        const role = 'claimer';
+        var nextSerial = Roles.nextSerial(role);
+        return this.createCreep(Roles.claimer.body, `${role}${nextSerial}`,
             { 
-                role: 'claimer', 
+                role, 
                 working: false, 
                 serial: nextSerial, 
                 roleType: Roles.claimer.roleType,
-                target: target
+                target
             });
     };
 
@@ -313,9 +316,9 @@ StructureSpawn.prototype.newCreep =
     function (role, body) {
         body = body || Roles[role].body;
         var nextSerial = Roles.nextSerial(role);
-        return this.createCreep(body, role + nextSerial,
+        return this.createCreep(body, `${role}${nextSerial}`,
             { 
-                role: role, 
+                role, 
                 working: false, 
                 serial: nextSerial,
                 roleType: Roles[role].roleType
@@ -325,23 +328,11 @@ StructureSpawn.prototype.newCreep =
 // roleStatus
 StructureSpawn.prototype.roleStatus =
     function (role) {
-        var status = this.room + " " + this + " ";
-        if (role != undefined) {
-            status += Roles.status(role, this.room.name);
-        } else {
-            for (let r of primaryRoles) {
-                status += Roles.status(r, this.room.name) + " | ";
-            }
-            for (let r of secondaryRoles) {
-                status += Roles.status(r, this.room.name) + " | ";
-            }
-            for (let r of remoteRoles) {
-                status += Roles.status(r, this.room.name) + " | ";
-            }
-            for (let r of specializedRoles) {
-                status += Roles.status(r, this.room.name) + " | ";
-            }
-        }
+        const roomName = this.room.name;
+        const separater = ' | ';
+        const roles = role ? [role] : [...primaryRoles, ...secondaryRoles, ...remoteRoles, ...specializedRoles];
+        let status = `${this.room} ${this}`;
+        roles.forEach(r => status += `${Roles.status(r, roomName)}${separater}`);
         return status;
     };
 
@@ -355,7 +346,7 @@ StructureSpawn.prototype.avgCreepSize =
                 totalSize += Constants.BODYPART_COST[body.type];
             }
         }
-        return "Average creep size: " + Math.floor(totalSize / creeps.length);
+        return `Average creep size: ${Math.floor(totalSize / creeps.length)}`;
     };
 
 // energyStatus
@@ -363,5 +354,5 @@ StructureSpawn.prototype.energyStatus =
     function () {
         let level = this.room.energyAvailable;
         let capacity = this.room.energyCapacityAvailable;
-        console.log("[" + level + "/" + capacity + "]");
+        console.log(`[${level}/${capacity}]`);
     };

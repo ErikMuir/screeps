@@ -8,7 +8,7 @@ module.exports.loop = function () {
     // clear up memory from dead creeps
     for (let name in Memory.creeps) {
         if (!Game.creeps[name]) {
-            console.log('laid to rest: ' + name);
+            console.log(`laid to rest: ${name}`);
             delete Memory.creeps[name];
         }
     }
@@ -29,9 +29,9 @@ module.exports.loop = function () {
         var spawn = Game.spawns[spawnName];
         var level = Game.spawns[spawnName].room.energyAvailable;
         var capacity = Game.spawns[spawnName].room.energyCapacityAvailable;
-        var energy = "[energy " + level + "/" + capacity + "]";
+        var energy = `[energy ${level}/${capacity}]`;
         
-        Globals.tickMessages[spawnName] = room + " " + spawn + " " + energy + " ... ";
+        Globals.tickMessages[spawnName] = `${room} ${spawn} ${energy} ... `;
         Game.spawns[spawnName].spawnCreepsIfNecessary();
     }
 };
