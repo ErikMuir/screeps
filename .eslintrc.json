@@ -36,6 +36,25 @@
       {
         "multiline": true
       }
+    ],
+    "no-undef": "off",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never"
+      }
+    ],
+    "radix": [
+      "error",
+      "as-needed"
+    ],
+    "arrow-parens": [
+      "error",
+      "as-needed"
     ]
   }
 }

@@ -77,28 +77,28 @@
     min: 0,
     targetPerc: undefined,
   },
-  count: function (role, room) {
+  count(role, room) {
     return _.sum(
       Game.creeps,
-      c => (role == undefined || c.memory.role === role) && (room == undefined || c.room.name === room)
+      c => (role === undefined || c.memory.role === role) && (room === undefined || c.room.name === room)
     );
   },
-  creeps: function (role, room) {
-    return _.filter(Game.creeps, c => c.memory.role === role && (room == undefined || c.room.name === room));
+  creeps(role, room) {
+    return _.filter(Game.creeps, c => c.memory.role === role && (room === undefined || c.room.name === room));
   },
-  nextSerial: function (role) {
+  nextSerial(role) {
     return this.count(role) === 0 ? 1 : _.max(this.creeps(role).map(c => parseInt(c.memory.serial) || 0)) + 1;
   },
-  status: function (role, room) {
+  status(role, room) {
     return `${role}: ${this.count(role, room)}/${this[role].min}`;
   },
-  percentage: function (role, room) {
+  percentage(role, room) {
     return this.count(role, room) / _.sum(Game.creeps, c => c.memory.roleType === this[role].roleType);
   },
-  lessThanPerc: function (role, room, percOverride) {
+  lessThanPerc(role, room, percOverride) {
     return this.percentage(role, room) < (percOverride || this[role].targetPerc || 0);
   },
-  lessThanMin: function (role, room, minOverride) {
+  lessThanMin(role, room, minOverride) {
     return this.count(role, room) < (minOverride || this[role].min);
   },
 };
