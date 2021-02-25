@@ -1,10 +1,10 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 
-module.exports = class Harvester extends Role {
+module.exports = class RemoteHarvester extends Role {
   constructor() {
-    const name = 'Harvester';
-    const type = RoleType.Primary;
+    const name = 'RemoteHarvester';
+    const type = RoleType.Remote;
     const body = [WORK, WORK, CARRY, MOVE];
     const min = 1;
     const targetPerc = 0.25;
@@ -18,6 +18,8 @@ module.exports = class Harvester extends Role {
     } else if (!creep.memory.working && creep.carry.energy === creep.carryCapacity) {
       creep.memory.working = true; // transfer energy to structure
     }
+
+    // TODO : copy logic from role.remoteHarvester.js
 
     if (!creep.memory.working) {
       creep.getEnergy(['container', 'source']);

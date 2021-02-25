@@ -1,8 +1,6 @@
-﻿creep.room.find(FIND_STRUCTURES, {
-  filter: function (structure) {
-    return structure.structureType == STRUCTURE_CONTROLLER;
-  },
-});
+﻿/* eslint-disable no-console */
+
+creep.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType === STRUCTURE_CONTROLLER });
 
 // E65N99
 
@@ -35,4 +33,4 @@ _.forEach(Game.creeps, c => {
   }
 });
 
-_.forEach(Game.creeps, c => console.log(c.name + ': ' + c.memory.roleType));
+_.forEach(Game.creeps, c => console.log(`${c.name}: ${c.memory.roleType}`));

@@ -1,13 +1,16 @@
 module.exports = class Role {
   constructor(params) {
-    const { roleType, body, min, targetPerc } = params;
-    this.roleType = roleType;
+    const { name, type, body, min, targetPerc } = params;
+    this.name = name;
+    this.type = type;
     this.body = body;
     this.min = min;
     this.targetPerc = targetPerc;
   }
 
-  get roleType() { return this.roleType; }
+  get name() { return this.name; }
+
+  get type() { return this.type; }
 
   get body() { return this.body; }
 
@@ -15,8 +18,7 @@ module.exports = class Role {
 
   get targetPerc() { return this.targetPerc; }
 
-  // eslint-disable-next-line class-methods-use-this
-  run() {
+  static run() {
     throw new Error('You have to implement the run method!');
   }
 };

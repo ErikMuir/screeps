@@ -1,4 +1,4 @@
-function returnCode(code) {
+module.exports = function returnCode(code) {
   switch (code) {
     case 0:
       return 'OK';
@@ -33,6 +33,4 @@ function returnCode(code) {
     default:
       return `Unknown code: ${code}`;
   }
-}
-
-module.exports = returnCode;
+};

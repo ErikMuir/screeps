@@ -27,7 +27,12 @@
       }
     ],
     "no-console": "error",
-    "no-param-reassign": "error",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
     "prefer-template": "warn",
     "no-return-await": "off",
     "linebreak-style": "off",

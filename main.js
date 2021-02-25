@@ -1,37 +1,37 @@
-// import modules
-require('prototype.creep');
-require('prototype.tower');
-require('prototype.spawn');
-var Globals = require('globals');
+require('./prototype-extensions/prototype.creep');
+require('./prototype-extensions/prototype.tower');
+require('./prototype-extensions/prototype.spawn');
+const { tickMessages } = require('./utils/globals');
+const Logger = require('./utils/Logger');
 
-module.exports.loop = function () {
+module.exports.loop = () => {
   // clear up memory from dead creeps
-  for (let name in Memory.creeps) {
+  Object.keys(Memory.creeps).forEach(name => {
     if (!Game.creeps[name]) {
-      console.log(`laid to rest: ${name}`);
+      Logger.info(`laid to rest: ${name}`);
       delete Memory.creeps[name];
     }
-  }
+  });
 
   // run creep logic for each creep
-  for (let name in Game.creeps) {
-    Game.creeps[name].runRole();
-  }
+  Object.keys(Game.creeps)
+    .forEach(name => Game.creeps[name].runRole());
 
   // run tower logic for each tower
-  for (let tower of _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER)) {
-    tower.defend();
-  }
+  Game.structures
+    .filter(s => s.structureType === STRUCTURE_TOWER)
+    .forEach(tower => tower.defend());
 
   // run spawn logic for each spawn
-  for (let spawnName in Game.spawns) {
-    var room = Game.spawns[spawnName].room;
-    var spawn = Game.spawns[spawnName];
-    var level = Game.spawns[spawnName].room.energyAvailable;
-    var capacity = Game.spawns[spawnName].room.energyCapacityAvailable;
-    var energy = `[energy ${level}/${capacity}]`;
+  Object.keys(Game.spawns)
+    .forEach(name => {
+      const { room } = Game.spawns[name];
+      const spawn = Game.spawns[name];
+      const level = Game.spawns[name].room.energyAvailable;
+      const capacity = Game.spawns[name].room.energyCapacityAvailable;
+      const energy = `[energy ${level}/${capacity}]`;
 
-    Globals.tickMessages[spawnName] = `${room} ${spawn} ${energy} ... `;
-    Game.spawns[spawnName].spawnCreepsIfNecessary();
-  }
+      tickMessages[name] = `${room} ${spawn} ${energy} ... `;
+      Game.spawns[name].spawnCreepsIfNecessary();
+    });
 };
