@@ -1,36 +1,25 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 
-module.exports = class RemoteHarvester extends Role {
+module.exports = class Lorry extends Role {
   constructor() {
-    const name = 'RemoteHarvester';
-    const type = RoleType.Remote;
-    const body = [WORK, WORK, CARRY, MOVE];
-    const min = 2;
+    const name = 'Lorry';
+    const type = RoleType.Specialized;
+    const body = [WORK, WORK, MOVE];
+    const min = 0;
     super({ name, type, body, min });
   }
 
   static run(creep) {
     // do we need to change our primary goal?
     if (creep.memory.working && creep.carry.energy === 0) {
-      creep.memory.working = false; // harvest energy from source
+      creep.memory.working = false; // pick up energy
     } else if (!creep.memory.working && creep.carry.energy === creep.carryCapacity) {
-      creep.memory.working = true; // transfer energy to structure
+      creep.memory.working = true; // deliver energy
     }
 
     if (!creep.memory.working) {
-      if (creep.room.name === creep.memory.target) {
-        const source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex];
-        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(source);
-        }
-      } else {
-        const exit = creep.room.findExitTo(creep.memory.target);
-        creep.moveTo(creep.pos.findClosestByRange(exit));
-      }
-    } else if (creep.room.name !== creep.memory.home) {
-      const exit = creep.room.findExitTo(creep.memory.home);
-      creep.moveTo(creep.pos.findClosestByRange(exit));
+      creep.getEnergy(['container']);
     } else {
       // TODO : extract these helper functions into separate file to be used by Harvester.js
       getEnergyPercentage = s => (s.energy / s.energyCapacity) * 100;
@@ -58,7 +47,7 @@ module.exports = class RemoteHarvester extends Role {
       getClosestStructureNeedingEnergy = () => getClosestSpawnNeedingEnergy()
         || getClosestExtensionNeedingEnergy()
         || getClosestTowerNeedingEnergy()
-        || getClosestContainerNeedingEnergy() // TODO : add a flag to the role to make this optional
+        // || getClosestContainerNeedingEnergy() // TODO : add a flag to the role to make this optional
         || creep.room.storage;
 
       const structure = getClosestStructureNeedingEnergy();

@@ -22,6 +22,7 @@ module.exports = class Harvester extends Role {
     if (!creep.memory.working) {
       creep.getEnergy(['container', 'source']);
     } else {
+      // TODO : extract these helper functions into separate file to be used by Harvester.js
       getEnergyPercentage = s => (s.energy / s.energyCapacity) * 100;
       isSpawn = s => s.structureType === STRUCTURE_SPAWN;
       isExtension = s => s.structureType === STRUCTURE_EXTENSION;
@@ -47,7 +48,7 @@ module.exports = class Harvester extends Role {
       getClosestStructureNeedingEnergy = () => getClosestSpawnNeedingEnergy()
         || getClosestExtensionNeedingEnergy()
         || getClosestTowerNeedingEnergy()
-        || getClosestContainerNeedingEnergy() // TODO : add a flag to make this optional
+        || getClosestContainerNeedingEnergy() // TODO : add a flag to the role to make this optional
         || creep.room.storage;
 
       const structure = getClosestStructureNeedingEnergy();
