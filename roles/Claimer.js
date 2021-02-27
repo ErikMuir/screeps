@@ -3,11 +3,11 @@ const RoleType = require('./RoleType');
 
 module.exports = class Claimer extends Role {
   constructor() {
-    const name = 'Claimer';
-    const type = RoleType.Remote;
-    const body = [CLAIM, MOVE, MOVE];
-    const min = 0;
-    super({ name, type, body, min });
+    const roleName = 'Claimer';
+    const roleType = RoleType.Remote;
+    const roleBody = [CLAIM, MOVE, MOVE];
+    const roleMin = 0;
+    super({ roleName, roleType, roleBody, roleMin });
   }
 
   static run(creep) {

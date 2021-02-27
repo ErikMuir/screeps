@@ -4,11 +4,11 @@ const Logger = require('../utils/Logger');
 
 module.exports = class Attacker extends Role {
   constructor() {
-    const name = 'Attacker';
-    const type = RoleType.Specialized;
-    const body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
-    const min = 1;
-    super({ name, type, body, min });
+    const roleName = 'Attacker';
+    const roleType = RoleType.Specialized;
+    const roleBody = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
+    const roleMin = 1;
+    super({ roleName, roleType, roleBody, roleMin });
   }
 
   static run(creep) {

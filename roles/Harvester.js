@@ -3,12 +3,12 @@ const RoleType = require('./RoleType');
 
 module.exports = class Harvester extends Role {
   constructor() {
-    const name = 'Harvester';
-    const type = RoleType.Primary;
-    const body = [WORK, WORK, CARRY, MOVE];
-    const min = 1;
-    const targetPerc = 0.25;
-    super({ name, type, body, min, targetPerc });
+    const roleName = 'Harvester';
+    const roleType = RoleType.Primary;
+    const roleBody = [WORK, WORK, CARRY, MOVE];
+    const roleMin = 1;
+    const roleRatio = 0.25;
+    super({ roleName, roleType, roleBody, roleMin, roleRatio });
   }
 
   static run(creep) {
@@ -22,7 +22,7 @@ module.exports = class Harvester extends Role {
     if (!creep.memory.working) {
       creep.getEnergy(['container', 'source']);
     } else {
-      // TODO : extract these helper functions into separate file to be used by Harvester.js
+      // TODO : extract these helper functions into separate file to be used by other roles
       getEnergyPercentage = s => (s.energy / s.energyCapacity) * 100;
       isSpawn = s => s.structureType === STRUCTURE_SPAWN;
       isExtension = s => s.structureType === STRUCTURE_EXTENSION;

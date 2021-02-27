@@ -3,12 +3,12 @@ const RoleType = require('./RoleType');
 
 module.exports = class Builder extends Role {
   constructor() {
-    const name = 'Upgrader';
-    const type = RoleType.Primary;
-    const body = [WORK, CARRY, MOVE, MOVE];
-    const min = 1;
-    const targetPerc = 0.25;
-    super({ name, type, body, min, targetPerc });
+    const roleName = 'Upgrader';
+    const roleType = RoleType.Primary;
+    const roleBody = [WORK, CARRY, MOVE, MOVE];
+    const roleMin = 1;
+    const roleRatio = 0.25;
+    super({ roleName, roleType, roleBody, roleMin, roleRatio });
   }
 
   static run(creep) {

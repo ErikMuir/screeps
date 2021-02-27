@@ -4,12 +4,12 @@ const Repairer = require('./Repairer');
 
 module.exports = class RampartRepairer extends Role {
   constructor() {
-    const name = 'RampartRepairer';
-    const type = RoleType.Secondary;
-    const body = [WORK, WORK, CARRY, MOVE];
-    const min = 1;
-    const targetPerc = 0.25;
-    super({ name, type, body, min, targetPerc });
+    const roleName = 'RampartRepairer';
+    const roleType = RoleType.Secondary;
+    const roleBody = [WORK, WORK, CARRY, MOVE];
+    const roleMin = 1;
+    const roleRatio = 0.25;
+    super({ roleName, roleType, roleBody, roleMin, roleRatio });
   }
 
   static run(creep) {

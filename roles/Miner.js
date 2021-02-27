@@ -4,11 +4,11 @@ const Logger = require('../utils/Logger');
 
 module.exports = class Miner extends Role {
   constructor() {
-    const name = 'Miner';
-    const type = RoleType.Specialized;
-    const body = [WORK, WORK, WORK, WORK, WORK, MOVE];
-    const min = 0;
-    super({ name, type, body, min });
+    const roleName = 'Miner';
+    const roleType = RoleType.Specialized;
+    const roleBody = [WORK, WORK, WORK, WORK, WORK, MOVE];
+    const roleMin = 0;
+    super({ roleName, roleType, roleBody, roleMin });
   }
 
   static run(creep) {

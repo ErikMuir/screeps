@@ -5,11 +5,11 @@ const Logger = require('../utils/Logger');
 
 module.exports = class RemoteBuilder extends Role {
   constructor() {
-    const name = 'RemoteBuilder';
-    const type = RoleType.Remote;
-    const body = [WORK, WORK, CARRY, MOVE];
-    const min = 2;
-    super({ name, type, body, min });
+    const roleName = 'RemoteBuilder';
+    const roleType = RoleType.Remote;
+    const roleBody = [WORK, WORK, CARRY, MOVE];
+    const roleMin = 2;
+    super({ roleName, roleType, roleBody, roleMin });
   }
 
   static run(creep) {

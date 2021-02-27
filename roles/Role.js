@@ -1,24 +1,42 @@
 module.exports = class Role {
   constructor(params) {
-    const { name, type, body, min, targetPerc } = params;
-    this.name = name;
-    this.type = type;
-    this.body = body;
-    this.min = min;
-    this.targetPerc = targetPerc;
+    const { roleName, roleType, roleBody, roleMin, roleRatio } = params;
+    this.roleName = roleName;
+    this.roleType = roleType;
+    this.roleBody = roleBody;
+    this.roleMin = roleMin;
+    this.roleRatio = roleRatio;
   }
 
-  get name() { return this.name; }
+  get roleName() {
+    return this.roleName;
+  }
 
-  get type() { return this.type; }
+  get roleType() {
+    return this.roleType;
+  }
 
-  get body() { return this.body; }
+  get roleBody() {
+    return this.roleBody;
+  }
 
-  get min() { return this.min; }
+  get roleMin() {
+    return this.roleMin;
+  }
 
-  get targetPerc() { return this.targetPerc; }
+  get roleRatio() {
+    return this.roleRatio;
+  }
 
   static run() {
     throw new Error('You have to implement the run method!');
+  }
+
+  static count() {
+    throw new Error('You have to implement the run method!');
+    return _.sum(
+      Game.creeps,
+      c => (role === undefined || c.memory.role === role) && (room === undefined || c.room.name === room)
+    );
   }
 };
