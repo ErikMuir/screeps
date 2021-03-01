@@ -1,34 +1,46 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 
-const roleName = 'Upgrader';
+const name = 'Upgrader';
+const type = RoleType.Primary;
+const body = [WORK, CARRY, MOVE, MOVE];
+const min = 1;
+const ratio = 0.25;
 
-module.exports = class Builder extends Role {
-  static get roleName() {
-    return roleName;
+module.exports = class Upgrader extends Role {
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Primary;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [WORK, CARRY, MOVE, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 1;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return 0.25;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: Upgrader, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: Upgrader, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: Upgrader });
+
+  static getStatus = room => Role.getStatus({ role: Upgrader, room });
+  
+  static getPercentage = room => Role.getPercentage({ role: Upgrader, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Upgrader, room, percOverride });
+
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Upgrader, room, minOverride });
 
   static run(creep) {
     if (creep.memory.target && creep.memory.target !== creep.room.name) {

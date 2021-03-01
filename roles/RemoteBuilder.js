@@ -3,34 +3,46 @@ const RoleType = require('./RoleType');
 const Harvester = require('./Harvester');
 const Logger = require('../utils/Logger');
 
-const roleName = 'RemoteBuilder';
+const name = 'RemoteBuilder';
+const type = RoleType.Remote;
+const body = [WORK, WORK, CARRY, MOVE];
+const min = 2;
+const ratio = undefined;
 
 module.exports = class RemoteBuilder extends Role {
-  static get roleName() {
-    return roleName;
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Remote;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [WORK, WORK, CARRY, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 2;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return undefined;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: RemoteBuilder, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: RemoteBuilder, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: RemoteBuilder });
+
+  static getStatus = room => Role.getStatus({ role: RemoteBuilder, room });
+  
+  static getPercentage = room => Role.getPercentage({ role: RemoteBuilder, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: RemoteBuilder, room, percOverride });
+
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: RemoteBuilder, room, minOverride });
 
   static run(creep) {
     // do we need to change our primary goal?

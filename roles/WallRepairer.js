@@ -2,34 +2,46 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Builder = require('./Builder');
 
-const roleName = 'WallRepairer';
+const name = 'WallRepairer';
+const type = RoleType.Secondary;
+const body = [WORK, WORK, CARRY, MOVE];
+const min = 1;
+const ratio = 0.25;
 
 module.exports = class WallRepairer extends Role {
-  static get roleName() {
-    return roleName;
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Secondary;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [WORK, WORK, CARRY, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 1;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return 0.25;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: WallRepairer, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: WallRepairer, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: WallRepairer });
+
+  static getStatus = room => Role.getStatus({ role: WallRepairer, room });
+  
+  static getPercentage = room => Role.getPercentage({ role: WallRepairer, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: WallRepairer, room, percOverride });
+
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: WallRepairer, room, minOverride });
 
   static run(creep) {
     // do we need to change our primary goal?

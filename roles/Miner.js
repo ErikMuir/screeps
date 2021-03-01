@@ -2,34 +2,46 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Logger = require('../utils/Logger');
 
-const roleName = 'Miner';
+const name = 'Miner';
+const type = RoleType.Specialized;
+const body = [WORK, WORK, WORK, WORK, WORK, MOVE];
+const min = 0;
+const ratio = undefined;
 
 module.exports = class Miner extends Role {
-  static get roleName() {
-    return roleName;
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Specialized;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [WORK, WORK, WORK, WORK, WORK, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 0;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return undefined;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: Miner, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: Miner, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: Miner });
+
+  static getStatus = room => Role.getStatus({ role: Miner, room });
+  
+  static getPercentage = room => Role.getPercentage({ role: Miner, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Miner, room, percOverride });
+
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Miner, room, minOverride });
 
   static run(creep) {
     // get source

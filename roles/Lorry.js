@@ -1,34 +1,46 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 
-const roleName = 'Lorry';
+const name = 'Lorry';
+const type = RoleType.Specialized;
+const body = [WORK, WORK, MOVE];
+const min = 0;
+const ratio = undefined;
 
 module.exports = class Lorry extends Role {
-  static get roleName() {
-    return roleName;
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Specialized;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [WORK, WORK, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 0;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return undefined;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: Lorry, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: Lorry, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: Lorry });
+
+  static getStatus = room => Role.getStatus({ role: Lorry, room });
+  
+  static getPercentage = room => Role.getPercentage({ role: Lorry, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Lorry, room, percOverride });
+
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Lorry, room, minOverride });
 
   static run(creep) {
     // do we need to change our primary goal?

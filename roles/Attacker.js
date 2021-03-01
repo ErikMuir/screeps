@@ -2,34 +2,46 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Logger = require('../utils/Logger');
 
-const roleName = 'Attacker';
+const name = 'Attacker';
+const type = RoleType.Specialized;
+const body = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
+const min = 1;
+const ratio = undefined;
 
 module.exports = class Attacker extends Role {
-  static get roleName() {
-    return roleName;
+  static get name() {
+    return name;
   }
 
-  static get roleType() {
-    return RoleType.Specialized;
+  static get type() {
+    return type;
   }
 
-  static get roleBody() {
-    return [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
+  static get body() {
+    return body;
   }
 
-  static get roleMin() {
-    return 1;
+  static get min() {
+    return min;
   }
 
-  static get roleRatio() {
-    return undefined;
+  static get ratio() {
+    return ratio;
   }
 
-  static getCount = room => Role.count({ roleName, room });
+  static getCount = room => Role.count({ role: Attacker, room });
 
-  static getCreeps = room => Role.getCreeps({ roleName, room });
+  static getCreeps = room => Role.getCreeps({ role: Attacker, room });
 
-  static nextSerial = () => Role.nextSerial(roleName);
+  static nextSerial = () => Role.nextSerial({ role: Attacker });
+
+  static getStatus = room => Role.getStatus({ role: Attacker, room });
+
+  static getPercentage = room => Role.getPercentage({ role: Attacker, room });
+
+  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Attacker, room, percOverride });
+  
+  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Attacker, room, minOverride });
 
   static run(creep) {
     if (creep.memory.target) {
@@ -41,6 +53,7 @@ module.exports = class Attacker extends Role {
       }
 
       // move away from the edges
+      // (there was weird behavior where they would keep entering and leaving the room over and over)
       if (creep.pos.x === 0 || creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49) {
         creep.moveTo(new RoomPosition(25, 25, creep.memory.target));
       }
