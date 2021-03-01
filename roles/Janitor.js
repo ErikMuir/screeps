@@ -3,14 +3,34 @@ const RoleType = require('./RoleType');
 const Lorry = require('./Lorry');
 const Logger = require('../utils/Logger');
 
+const roleName = 'Janitor';
+
 module.exports = class Janitor extends Role {
-  constructor() {
-    const roleName = 'Janitor';
-    const roleType = RoleType.Specialized;
-    const roleBody = [CARRY, CARRY, MOVE];
-    const roleMin = 1;
-    super({ roleName, roleType, roleBody, roleMin });
+  static get roleName() {
+    return roleName;
   }
+
+  static get roleType() {
+    return RoleType.Specialized;
+  }
+
+  static get roleBody() {
+    return [CARRY, CARRY, MOVE];
+  }
+
+  static get roleMin() {
+    return 1;
+  }
+
+  static get roleRatio() {
+    return undefined;
+  }
+
+  static getCount = room => Role.count({ roleName, room });
+
+  static getCreeps = room => Role.getCreeps({ roleName, room });
+
+  static nextSerial = () => Role.nextSerial(roleName);
 
   static run(creep) {
     // do we need to change our primary goal?
@@ -34,8 +54,8 @@ module.exports = class Janitor extends Role {
     } else {
       const structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s => (s.structureType === STRUCTURE_SPAWN
-            || s.structureType === STRUCTURE_EXTENSION
-            || s.structureType === STRUCTURE_TOWER)
+          || s.structureType === STRUCTURE_EXTENSION
+          || s.structureType === STRUCTURE_TOWER)
           && s.energy < s.energyCapacity,
       }) || creep.room.storage;
 

@@ -1,42 +1,19 @@
 module.exports = class Role {
-  constructor(params) {
-    const { roleName, roleType, roleBody, roleMin, roleRatio } = params;
-    this.roleName = roleName;
-    this.roleType = roleType;
-    this.roleBody = roleBody;
-    this.roleMin = roleMin;
-    this.roleRatio = roleRatio;
+  constructor() {
+    if (this instanceof Role) {
+      throw new Error('Roles cannot be instantiated.');
+    }
   }
 
-  get roleName() {
-    return this.roleName;
-  }
+  static getCreeps = ({ roleName, room }) => Game.creeps
+    .filter(c => (!room || room === c.room.name) && (!roleName || roleName === c.roleName));
 
-  get roleType() {
-    return this.roleType;
-  }
+  static getCount = ({ roleName, room }) => Role.getCreeps({ roleName, room }).length;
 
-  get roleBody() {
-    return this.roleBody;
-  }
-
-  get roleMin() {
-    return this.roleMin;
-  }
-
-  get roleRatio() {
-    return this.roleRatio;
-  }
-
-  static run() {
-    throw new Error('You have to implement the run method!');
-  }
-
-  static count() {
-    throw new Error('You have to implement the run method!');
-    return _.sum(
-      Game.creeps,
-      c => (role === undefined || c.memory.role === role) && (room === undefined || c.room.name === room)
-    );
+  static nextSerial = roleName => {
+    if (!roleName) throw new Error('Role.nextSerial: roleName is required');
+    const serials = Role.getCreeps({ roleName }).map(c => parseInt(c.memory.serial) || 0);
+    const lastSerial = serials.length ? Math.max(...serials) : 0
+    return lastSerial + 1;
   }
 };

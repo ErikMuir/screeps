@@ -2,15 +2,34 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Builder = require('./Builder');
 
+const roleName = 'WallRepairer';
+
 module.exports = class WallRepairer extends Role {
-  constructor() {
-    const roleName = 'WallRepairer';
-    const roleType = RoleType.Secondary;
-    const roleBody = [WORK, WORK, CARRY, MOVE];
-    const roleMin = 1;
-    const roleRatio = 0.25;
-    super({ roleName, roleType, roleBody, roleMin, roleRatio });
+  static get roleName() {
+    return roleName;
   }
+
+  static get roleType() {
+    return RoleType.Secondary;
+  }
+
+  static get roleBody() {
+    return [WORK, WORK, CARRY, MOVE];
+  }
+
+  static get roleMin() {
+    return 1;
+  }
+
+  static get roleRatio() {
+    return 0.25;
+  }
+
+  static getCount = room => Role.count({ roleName, room });
+
+  static getCreeps = room => Role.getCreeps({ roleName, room });
+
+  static nextSerial = () => Role.nextSerial(roleName);
 
   static run(creep) {
     // do we need to change our primary goal?

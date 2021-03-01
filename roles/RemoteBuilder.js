@@ -3,14 +3,34 @@ const RoleType = require('./RoleType');
 const Harvester = require('./Harvester');
 const Logger = require('../utils/Logger');
 
+const roleName = 'RemoteBuilder';
+
 module.exports = class RemoteBuilder extends Role {
-  constructor() {
-    const roleName = 'RemoteBuilder';
-    const roleType = RoleType.Remote;
-    const roleBody = [WORK, WORK, CARRY, MOVE];
-    const roleMin = 2;
-    super({ roleName, roleType, roleBody, roleMin });
+  static get roleName() {
+    return roleName;
   }
+
+  static get roleType() {
+    return RoleType.Remote;
+  }
+
+  static get roleBody() {
+    return [WORK, WORK, CARRY, MOVE];
+  }
+
+  static get roleMin() {
+    return 2;
+  }
+
+  static get roleRatio() {
+    return undefined;
+  }
+
+  static getCount = room => Role.count({ roleName, room });
+
+  static getCreeps = room => Role.getCreeps({ roleName, room });
+
+  static nextSerial = () => Role.nextSerial(roleName);
 
   static run(creep) {
     // do we need to change our primary goal?

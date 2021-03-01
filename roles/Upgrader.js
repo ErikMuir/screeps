@@ -1,15 +1,34 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 
+const roleName = 'Upgrader';
+
 module.exports = class Builder extends Role {
-  constructor() {
-    const roleName = 'Upgrader';
-    const roleType = RoleType.Primary;
-    const roleBody = [WORK, CARRY, MOVE, MOVE];
-    const roleMin = 1;
-    const roleRatio = 0.25;
-    super({ roleName, roleType, roleBody, roleMin, roleRatio });
+  static get roleName() {
+    return roleName;
   }
+
+  static get roleType() {
+    return RoleType.Primary;
+  }
+
+  static get roleBody() {
+    return [WORK, CARRY, MOVE, MOVE];
+  }
+
+  static get roleMin() {
+    return 1;
+  }
+
+  static get roleRatio() {
+    return 0.25;
+  }
+
+  static getCount = room => Role.count({ roleName, room });
+
+  static getCreeps = room => Role.getCreeps({ roleName, room });
+
+  static nextSerial = () => Role.nextSerial(roleName);
 
   static run(creep) {
     if (creep.memory.target && creep.memory.target !== creep.room.name) {

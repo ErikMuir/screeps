@@ -2,14 +2,34 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Logger = require('../utils/Logger');
 
+const roleName = 'Attacker';
+
 module.exports = class Attacker extends Role {
-  constructor() {
-    const roleName = 'Attacker';
-    const roleType = RoleType.Specialized;
-    const roleBody = [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
-    const roleMin = 1;
-    super({ roleName, roleType, roleBody, roleMin });
+  static get roleName() {
+    return roleName;
   }
+
+  static get roleType() {
+    return RoleType.Specialized;
+  }
+
+  static get roleBody() {
+    return [ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE];
+  }
+
+  static get roleMin() {
+    return 1;
+  }
+
+  static get roleRatio() {
+    return undefined;
+  }
+
+  static getCount = room => Role.count({ roleName, room });
+
+  static getCreeps = room => Role.getCreeps({ roleName, room });
+
+  static nextSerial = () => Role.nextSerial(roleName);
 
   static run(creep) {
     if (creep.memory.target) {
