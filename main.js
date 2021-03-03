@@ -1,5 +1,5 @@
-require('./prototype-extensions/prototype.creep');
-require('./prototype-extensions/prototype.tower');
+require('./prototype-extensions/Creep');
+require('./prototype-extensions/Tower');
 require('./prototype-extensions/prototype.spawn');
 const { tickMessages } = require('./utils/globals');
 const Logger = require('./utils/Logger');
@@ -18,9 +18,9 @@ module.exports.loop = () => {
     .forEach(name => Game.creeps[name].runRole());
 
   // run tower logic for each tower
-  Game.structures
-    .filter(s => s.structureType === STRUCTURE_TOWER)
-    .forEach(tower => tower.defend());
+  Object.keys(Game.structures)
+    .filter(key => Game.structures[key].structureType === STRUCTURE_TOWER)
+    .forEach(key => Game.structures[key].defend());
 
   // run spawn logic for each spawn
   Object.keys(Game.spawns)
