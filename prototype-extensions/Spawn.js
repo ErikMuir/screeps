@@ -3,6 +3,12 @@ const returnCode = require('../utils/returnCode');
 const { tickMessages } = require('../utils/globals');
 const Logger = require('../utils/Logger');
 const {
+  // eslint-disable-next-line no-unused-vars
+  allRoles,
+  primaryRoles,
+  secondaryRoles,
+  remoteRoles,
+  specializedRoles,
   Claimer,
   RemoteHarvester,
   RemoteBuilder,
@@ -10,12 +16,6 @@ const {
   Attacker,
   Miner,
   Lorry,
-  // eslint-disable-next-line no-unused-vars
-  allRoles,
-  primaryRoles,
-  secondaryRoles,
-  remoteRoles,
-  specializedRoles,
 } = require('../roles');
 
 StructureSpawn.prototype.primaryMin = undefined;
@@ -34,8 +34,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
   let name;
   let energy;
 
-  const wallRampartFilter = s => s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART;
-  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: wallRampartFilter });
+  const wallTypeStructuresFilter = s => s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART;
+  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: wallTypeStructuresFilter });
   const createSecondaryRoles = wallTypeStructures.length > 0;
 
   let primaryMinimumsMet = true;
@@ -76,18 +76,22 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
     // miners
     sources.forEach(source => {
       if (name) return;
-      const filter = s => s.structureType === STRUCTURE_CONTAINER;
-      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter });
+      const sourceId = source.id;
+      const containersFilter = s => s.structureType === STRUCTURE_CONTAINER;
+      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: containersFilter });
       containerCount = containers.length;
+
       containers.forEach(container => {
+        const containerId = container.id;
         const minerAlreadyExists = Game.creeps
           .find(c => c.memory.role === Miner
-            && c.memory.sourceId === source.id
-            && c.memory.containerId === container.id);
-        if (!minerAlreadyExists) {
-          tickMessages[this.name] += Logger.getSpawnAttemptMessage(Miner);
-          name = this.createMiner(source.id, container.id);
-        }
+            && c.memory.sourceId === sourceId
+            && c.memory.containerId === containerId);
+
+        if (minerAlreadyExists) return;
+
+        tickMessages[this.name] += Logger.getSpawnAttemptMessage(Miner);
+        name = this.createMiner({ sourceId, containerId });
       });
     });
 
@@ -196,11 +200,12 @@ StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, 
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
   const nextSerial = Role.nextSerial(role);
-  return this.createCreep(body, `${role.name}${nextSerial}`, {
+  const memory = {
     role,
     working: false,
     serial: nextSerial,
-  });
+  };
+  return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
 // createLorry
@@ -218,11 +223,12 @@ StructureSpawn.prototype.createLorry = function createLorry(energy) {
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
   const nextSerial = Lorry.nextSerial();
-  return this.createCreep(body, `${Lorry.name}${nextSerial}`, {
+  const memory = {
     role: Lorry,
     working: false,
     serial: nextSerial,
-  });
+  };
+  return this.spawnCreep(body, `${Lorry.name}${nextSerial}`, { memory });
 };
 
 // createJanitor
@@ -240,11 +246,12 @@ StructureSpawn.prototype.createJanitor = function createJanitor(energy) {
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
   const nextSerial = Janitor.nextSerial();
-  return this.createCreep(body, `${Janitor.name}${nextSerial}`, {
+  const memory = {
     role: Janitor,
     working: false,
     serial: nextSerial,
-  });
+  };
+  return this.spawnCreep(body, `${Janitor.name}${nextSerial}`, { memory });
 };
 
 // createAttacker
@@ -262,46 +269,50 @@ StructureSpawn.prototype.createAttacker = function createAttacker(energy) {
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
   const nextSerial = Attacker.nextSerial();
-  return this.createCreep(body, `${Attacker.name}${nextSerial}`, {
+  const memory = {
     role: Attacker,
     working: false,
     serial: nextSerial,
-  });
+  };
+  return this.spawnCreep(body, `${Attacker.name}${nextSerial}`, { memory });
 };
 
 // createMiner
-StructureSpawn.prototype.createMiner = function createMiner(sourceId, containerId) {
+StructureSpawn.prototype.createMiner = function createMiner({ sourceId, containerId }) {
   const nextSerial = Miner.nextSerial();
-  return this.createCreep(Miner.body, `${Miner.name}${nextSerial}`, {
+  const memory = {
     role: Miner,
     working: false,
     serial: nextSerial,
     sourceId,
     containerId,
-  });
+  };
+  return this.spawnCreep(Miner.body, `${Miner.name}${nextSerial}`, { memory });
 };
 
 // createClaimer
 StructureSpawn.prototype.createClaimer = function createClaimer(target) {
   const nextSerial = Claimer.nextSerial();
-  return this.createCreep(Claimer.body, `${Claimer.name}${nextSerial}`, {
+  const memory = {
     role: Claimer,
     working: false,
     serial: nextSerial,
     target,
-  });
+  };
+  return this.spawnCreep(Claimer.body, `${Claimer.name}${nextSerial}`, { memory });
 };
 
 // newCreep
 // -- keeping this around for easy console use
 StructureSpawn.prototype.newCreep = function newCreep(role, theBody) {
-  const body = theBody || Roles[role].body;
+  const body = theBody || role.body;
   const nextSerial = Role.nextSerial(role);
-  return this.createCreep(body, `${role.name}${nextSerial}`, {
+  const memory = {
     role,
     working: false,
     serial: nextSerial,
-  });
+  };
+  return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
 // roleStatus
