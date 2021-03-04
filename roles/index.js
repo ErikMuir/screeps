@@ -1,3 +1,4 @@
+const RoleType = require('./RoleType');
 const Harvester = require('./Harvester');
 const Upgrader = require('./Upgrader');
 const Builder = require('./Builder');
@@ -12,7 +13,7 @@ const Attacker = require('./Attacker');
 const Miner = require('./Miner');
 const Lorry = require('./Lorry');
 
-module.exports = [
+const allRoles = [
   Harvester,
   Upgrader,
   Builder,
@@ -27,3 +28,29 @@ module.exports = [
   Miner,
   Lorry,
 ];
+
+const primaryRoles = allRoles.filter(r => r.type === RoleType.Primary);
+const secondaryRoles = allRoles.filter(r => r.type === RoleType.Secondary);
+const remoteRoles = allRoles.filter(r => r.type === RoleType.Remote);
+const specializedRoles = allRoles.filter(r => r.type === RoleType.Specialized);
+
+module.exports = {
+  Harvester,
+  Upgrader,
+  Builder,
+  Repairer,
+  WallRepairer,
+  RampartRepairer,
+  Claimer,
+  RemoteHarvester,
+  RemoteBuilder,
+  Janitor,
+  Attacker,
+  Miner,
+  Lorry,
+  allRoles,
+  primaryRoles,
+  secondaryRoles,
+  remoteRoles,
+  specializedRoles,
+};

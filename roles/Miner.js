@@ -29,19 +29,19 @@ module.exports = class Miner extends Role {
     return ratio;
   }
 
-  static getCount = room => Role.count({ role: Miner, room });
+  static getCount(room) { return Role.count({ role: Miner, room }); }
 
-  static getCreeps = room => Role.getCreeps({ role: Miner, room });
+  static getCreeps(room) { return Role.getCreeps({ role: Miner, room }); }
 
-  static nextSerial = () => Role.nextSerial({ role: Miner });
+  static nextSerial() { return Role.nextSerial({ role: Miner }); }
 
-  static getStatus = room => Role.getStatus({ role: Miner, room });
-  
-  static getPercentage = room => Role.getPercentage({ role: Miner, room });
+  static getStatus(room) { return Role.getStatus({ role: Miner, room }); }
 
-  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Miner, room, percOverride });
+  static getPercentage(room) { return Role.getPercentage({ role: Miner, room }); }
 
-  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Miner, room, minOverride });
+  static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Miner, room, percOverride }); }
+
+  static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Miner, room, minOverride }); }
 
   static run(creep) {
     // get source

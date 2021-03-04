@@ -30,19 +30,19 @@ module.exports = class Janitor extends Role {
     return ratio;
   }
 
-  static getCount = room => Role.count({ role: Janitor, room });
+  static getCount(room) { return Role.count({ role: Janitor, room }); }
 
-  static getCreeps = room => Role.getCreeps({ role: Janitor, room });
+  static getCreeps(room) { return Role.getCreeps({ role: Janitor, room }); }
 
-  static nextSerial = () => Role.nextSerial({ role: Janitor });
+  static nextSerial() { return Role.nextSerial({ role: Janitor }); }
 
-  static getStatus = room => Role.getStatus({ role: Janitor, room });
-  
-  static getPercentage = room => Role.getPercentage({ role: Janitor, room });
+  static getStatus(room) { return Role.getStatus({ role: Janitor, room }); }
 
-  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Janitor, room, percOverride });
+  static getPercentage(room) { return Role.getPercentage({ role: Janitor, room }); }
 
-  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Janitor, room, minOverride });
+  static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Janitor, room, percOverride }); }
+
+  static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Janitor, room, minOverride }); }
 
   static run(creep) {
     // do we need to change our primary goal?

@@ -1,6 +1,6 @@
 require('./prototype-extensions/Creep');
 require('./prototype-extensions/Tower');
-require('./prototype-extensions/prototype.spawn');
+require('./prototype-extensions/Spawn');
 const { tickMessages } = require('./utils/globals');
 const Logger = require('./utils/Logger');
 

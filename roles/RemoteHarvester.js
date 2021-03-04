@@ -28,19 +28,19 @@ module.exports = class RemoteHarvester extends Role {
     return ratio;
   }
 
-  static getCount = room => Role.count({ role: RemoteHarvester, room });
+  static getCount(room) { return Role.count({ role: RemoteHarvester, room }); }
 
-  static getCreeps = room => Role.getCreeps({ role: RemoteHarvester, room });
+  static getCreeps(room) { return Role.getCreeps({ role: RemoteHarvester, room }); }
 
-  static nextSerial = () => Role.nextSerial({ role: RemoteHarvester });
+  static nextSerial() { return Role.nextSerial({ role: RemoteHarvester }); }
 
-  static getStatus = room => Role.getStatus({ role: RemoteHarvester, room });
-  
-  static getPercentage = room => Role.getPercentage({ role: RemoteHarvester, room });
+  static getStatus(room) { return Role.getStatus({ role: RemoteHarvester, room }); }
 
-  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: RemoteHarvester, room, percOverride });
+  static getPercentage(room) { return Role.getPercentage({ role: RemoteHarvester, room }); }
 
-  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: RemoteHarvester, room, minOverride });
+  static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: RemoteHarvester, room, percOverride }); }
+
+  static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: RemoteHarvester, room, minOverride }); }
 
   static run(creep) {
     // do we need to change our primary goal?

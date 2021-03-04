@@ -29,19 +29,19 @@ module.exports = class Attacker extends Role {
     return ratio;
   }
 
-  static getCount = room => Role.count({ role: Attacker, room });
+  static getCount(room) { return Role.count({ role: Attacker, room }); }
 
-  static getCreeps = room => Role.getCreeps({ role: Attacker, room });
+  static getCreeps(room) { return Role.getCreeps({ role: Attacker, room }); }
 
-  static nextSerial = () => Role.nextSerial({ role: Attacker });
+  static nextSerial() { return Role.nextSerial({ role: Attacker }); }
 
-  static getStatus = room => Role.getStatus({ role: Attacker, room });
+  static getStatus(room) { return Role.getStatus({ role: Attacker, room }); }
 
-  static getPercentage = room => Role.getPercentage({ role: Attacker, room });
+  static getPercentage(room) { return Role.getPercentage({ role: Attacker, room }); }
 
-  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Attacker, room, percOverride });
-  
-  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Attacker, room, minOverride });
+  static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Attacker, room, percOverride }); }
+
+  static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Attacker, room, minOverride }); }
 
   static run(creep) {
     if (creep.memory.target) {

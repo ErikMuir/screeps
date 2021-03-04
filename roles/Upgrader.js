@@ -28,19 +28,19 @@ module.exports = class Upgrader extends Role {
     return ratio;
   }
 
-  static getCount = room => Role.count({ role: Upgrader, room });
+  static getCount(room) { return Role.count({ role: Upgrader, room }); }
 
-  static getCreeps = room => Role.getCreeps({ role: Upgrader, room });
+  static getCreeps(room) { return Role.getCreeps({ role: Upgrader, room }); }
 
-  static nextSerial = () => Role.nextSerial({ role: Upgrader });
+  static nextSerial() { return Role.nextSerial({ role: Upgrader }); }
 
-  static getStatus = room => Role.getStatus({ role: Upgrader, room });
-  
-  static getPercentage = room => Role.getPercentage({ role: Upgrader, room });
+  static getStatus(room) { return Role.getStatus({ role: Upgrader, room }); }
 
-  static lessThanPerc = (room, percOverride) => Role.lessThanPerc({ role: Upgrader, room, percOverride });
+  static getPercentage(room) { return Role.getPercentage({ role: Upgrader, room }); }
 
-  static lessThanMin = (room, minOverride) => Role.lessThanMin({ role: Upgrader, room, minOverride });
+  static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Upgrader, room, percOverride }); }
+
+  static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Upgrader, room, minOverride }); }
 
   static run(creep) {
     if (creep.memory.target && creep.memory.target !== creep.room.name) {
