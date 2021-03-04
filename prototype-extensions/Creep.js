@@ -1,7 +1,7 @@
-﻿const roles = require('../roles');
+﻿const filters = require('../utils/filters');
 
 Creep.prototype.runRole = function runRole() {
-  roles[this.memory.role].run(this); // TODO : does this work?
+  this.memory.role.run(this);
 };
 
 Creep.prototype.getEnergy = function getEnergy(sources) {
@@ -34,10 +34,7 @@ Creep.prototype.getEnergyFromSource = function getEnergyFromSource() {
 };
 
 Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
-  const container = this.pos.findClosestByPath(
-    FIND_STRUCTURES,
-    { filter: s => s.structureType === STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0 && s.room === this.room }
-  );
+  const container = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: filters.containersWithEnergy });
   if (container) {
     if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       this.moveTo(container);
@@ -47,10 +44,7 @@ Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
 };
 
 Creep.prototype.getEnergyFromStorage = function getEnergyFromStorage() {
-  const storage = this.pos.findClosestByPath(
-    FIND_STRUCTURES,
-    { filter: s => s.structureType === STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0 && s.room === this.room }
-  );
+  const storage = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: filters.storageWithEnergy });
   if (storage) {
     if (this.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       this.moveTo(storage);

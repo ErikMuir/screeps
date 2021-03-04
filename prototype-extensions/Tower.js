@@ -1,4 +1,5 @@
 ﻿const Logger = require('../utils/Logger');
+const filters = require('../utils/filters');
 
 StructureTower.prototype.defend = function defend() {
   // number one priority is to attack hostile creeps
@@ -14,14 +15,10 @@ StructureTower.prototype.defend = function defend() {
   const energyPercentage = (this.store[RESOURCE_ENERGY] / this.store.getCapacity(RESOURCE_ENERGY)) * 100;
   if (energyPercentage <= 50) return;
 
-  const damagedStructureFilter = s => s.hits < s.hitsMax && s.structureType !== STRUCTURE_WALL && s.structureType !== STRUCTURE_RAMPART;
-  const damagedRampartFilter = s => s.hits < s.hitsMax && s.structureType === STRUCTURE_RAMPART;
-  const damagedWallFilter = s => s.hits < s.hitsMax && s.structureType === STRUCTURE_WALL;
   const findStructureWithFilter = filter => this.pos.findClosestByRange(FIND_STRUCTURES, { filter });
-
-  const closestDamagedStructure = findStructureWithFilter(damagedStructureFilter)
-      || findStructureWithFilter(damagedRampartFilter)
-      || findStructureWithFilter(damagedWallFilter);
+  const closestDamagedStructure = findStructureWithFilter(filters.damagedStructureFilter)
+      || findStructureWithFilter(filters.damagedRampartFilter)
+      || findStructureWithFilter(filters.damagedWallFilter);
 
   if (closestDamagedStructure) {
     this.repair(closestDamagedStructure);

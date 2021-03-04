@@ -1,22 +1,15 @@
 ﻿const Role = require('../roles/Role');
+const RoleType = require('../roles/RoleType');
+const roles = require('../roles');
 const returnCode = require('../utils/returnCode');
 const { tickMessages } = require('../utils/globals');
+const filters = require('../utils/filters');
 const Logger = require('../utils/Logger');
-const {
-  // eslint-disable-next-line no-unused-vars
-  allRoles,
-  primaryRoles,
-  secondaryRoles,
-  remoteRoles,
-  specializedRoles,
-  Claimer,
-  RemoteHarvester,
-  RemoteBuilder,
-  Janitor,
-  Attacker,
-  Miner,
-  Lorry,
-} = require('../roles');
+
+const primaryRoles = roles.filter(r => r.type === RoleType.Primary);
+const secondaryRoles = roles.filter(r => r.type === RoleType.Secondary);
+const remoteRoles = roles.filter(r => r.type === RoleType.Remote);
+const specializedRoles = roles.filter(r => r.type === RoleType.Specialized);
 
 StructureSpawn.prototype.primaryMin = undefined;
 StructureSpawn.prototype.permanentRole = undefined;
@@ -34,8 +27,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
   let name;
   let energy;
 
-  const wallTypeStructuresFilter = s => s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART;
-  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: wallTypeStructuresFilter });
+  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: filters.wallTypeStructuresFilter });
   const createSecondaryRoles = wallTypeStructures.length > 0;
 
   let primaryMinimumsMet = true;
@@ -49,8 +41,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
 
   // ------------ SETTINGS OVERRIDES ---------------------------------------------------------
   this.primaryMin = 3;
-  // this.permanentRole = Janitor;
-  // this.overrideRole = Janitor;
+  // this.permanentRole = roles.Janitor;
+  // this.overrideRole = roles.Janitor;
   this.createJanitors = primaryMinimumsMet; // true;
   this.createAttackers = primaryMinimumsMet; // true;
   this.createMiners = primaryMinimumsMet; // true;
@@ -77,61 +69,60 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
     sources.forEach(source => {
       if (name) return;
       const sourceId = source.id;
-      const containersFilter = s => s.structureType === STRUCTURE_CONTAINER;
-      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: containersFilter });
+      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: filters.containersFilter });
       containerCount = containers.length;
 
       containers.forEach(container => {
         const containerId = container.id;
         const minerAlreadyExists = Game.creeps
-          .find(c => c.memory.role === Miner
+          .find(c => c.memory.role === roles.Miner
             && c.memory.sourceId === sourceId
             && c.memory.containerId === containerId);
 
         if (minerAlreadyExists) return;
 
-        tickMessages[this.name] += Logger.getSpawnAttemptMessage(Miner);
+        tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.Miner);
         name = this.createMiner({ sourceId, containerId });
       });
     });
 
     // lorries
-    if (!name && Lorry.getCount(room) < containerCount / 2) {
-      tickMessages[this.name] += Logger.getSpawnAttemptMessage(Lorry);
-      name = this.createCustomCreep(energy, Lorry);
+    if (!name && roles.Lorry.getCount(room) < containerCount / 2) {
+      tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.Lorry);
+      name = this.createCustomCreep(energy, roles.Lorry);
     }
   }
 
   // janitors
   if (!name && this.createJanitors) {
-    if (Janitor.lessThanMin(room)) {
-      tickMessages[this.name] += Logger.getSpawnAttemptMessage(Janitor);
-      name = this.createCustomCreep(energy, Janitor);
+    if (roles.Janitor.lessThanMin(room)) {
+      tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.Janitor);
+      name = this.createCustomCreep(energy, roles.Janitor);
     }
   }
 
   // attackers
   if (!name && this.createAttackers) {
-    if (Attacker.lessThanMin(room)) {
-      tickMessages[this.name] += Logger.getSpawnAttemptMessage(Attacker);
-      name = this.createCustomCreep(this.room.energyCapacityAvailable, Attacker);
+    if (roles.Attacker.lessThanMin(room)) {
+      tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.Attacker);
+      name = this.createCustomCreep(this.room.energyCapacityAvailable, roles.Attacker);
     }
   }
 
   // remoteHarvesters
   if (!name && this.createRemoteHarvesters) {
-    if (RemoteHarvester.lessThanMin(room)) {
-      tickMessages[this.name] += Logger.getSpawnAttemptMessage(RemoteHarvester);
-      name = this.createCustomCreep(energy, RemoteHarvester);
+    if (roles.RemoteHarvester.lessThanMin(room)) {
+      tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.RemoteHarvester);
+      name = this.createCustomCreep(energy, roles.RemoteHarvester);
     }
   }
 
   // remoteBuilders
   if (!name && this.createRemoteBuilders) {
-    if (RemoteBuilder.lessThanMin(room)) {
+    if (roles.RemoteBuilder.lessThanMin(room)) {
       // TODO : this is a bug. the count of remoteBuilders for a room will be 0 if they're already remote.
-      tickMessages[this.name] += Logger.getSpawnAttemptMessage(RemoteBuilder);
-      name = this.createCustomCreep(energy, RemoteBuilder);
+      tickMessages[this.name] += Logger.getSpawnAttemptMessage(roles.RemoteBuilder);
+      name = this.createCustomCreep(energy, roles.RemoteBuilder);
     }
   }
 
@@ -179,11 +170,11 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
 // createCustomCreep
 StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, role) {
   switch (role) {
-    case Lorry:
+    case roles.Lorry:
       return this.createLorry(energy);
-    case Janitor:
+    case roles.Janitor:
       return this.createJanitor(energy);
-    case Attacker:
+    case roles.Attacker:
       return this.createAttacker(energy);
     default:
   }
@@ -199,7 +190,7 @@ StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, 
 
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
-  const nextSerial = Role.nextSerial(role);
+  const nextSerial = role.nextSerial();
   const memory = {
     role,
     working: false,
@@ -210,6 +201,7 @@ StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, 
 
 // createLorry
 StructureSpawn.prototype.createLorry = function createLorry(energy) {
+  const role = roles.Lorry;
   const body = [];
   const numberOfParts = Math.min(Math.floor(energy / 150), Math.floor(50 / 3));
 
@@ -222,17 +214,18 @@ StructureSpawn.prototype.createLorry = function createLorry(energy) {
 
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
-  const nextSerial = Lorry.nextSerial();
+  const nextSerial = role.nextSerial();
   const memory = {
-    role: Lorry,
+    role,
     working: false,
     serial: nextSerial,
   };
-  return this.spawnCreep(body, `${Lorry.name}${nextSerial}`, { memory });
+  return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
 // createJanitor
 StructureSpawn.prototype.createJanitor = function createJanitor(energy) {
+  const role = roles.Janitor;
   const body = [];
   const numberOfParts = Math.min(Math.floor(energy / 150), Math.floor(50 / 3));
 
@@ -245,17 +238,18 @@ StructureSpawn.prototype.createJanitor = function createJanitor(energy) {
 
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
-  const nextSerial = Janitor.nextSerial();
+  const nextSerial = role.nextSerial();
   const memory = {
-    role: Janitor,
+    role,
     working: false,
     serial: nextSerial,
   };
-  return this.spawnCreep(body, `${Janitor.name}${nextSerial}`, { memory });
+  return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
 // createAttacker
 StructureSpawn.prototype.createAttacker = function createAttacker(energy) {
+  const role = roles.Attacker;
   const body = [];
   const numberOfParts = Math.min(Math.floor(energy / 210), Math.floor(50 / 3));
 
@@ -268,45 +262,47 @@ StructureSpawn.prototype.createAttacker = function createAttacker(energy) {
 
   if (!body.length) return ERR_NOT_ENOUGH_ENERGY;
 
-  const nextSerial = Attacker.nextSerial();
+  const nextSerial = role.nextSerial();
   const memory = {
-    role: Attacker,
+    role,
     working: false,
     serial: nextSerial,
   };
-  return this.spawnCreep(body, `${Attacker.name}${nextSerial}`, { memory });
+  return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
 // createMiner
 StructureSpawn.prototype.createMiner = function createMiner({ sourceId, containerId }) {
-  const nextSerial = Miner.nextSerial();
+  const role = roles.Miner;
+  const nextSerial = role.nextSerial();
   const memory = {
-    role: Miner,
+    role,
     working: false,
     serial: nextSerial,
     sourceId,
     containerId,
   };
-  return this.spawnCreep(Miner.body, `${Miner.name}${nextSerial}`, { memory });
+  return this.spawnCreep(role.body, `${role.name}${nextSerial}`, { memory });
 };
 
 // createClaimer
 StructureSpawn.prototype.createClaimer = function createClaimer(target) {
-  const nextSerial = Claimer.nextSerial();
+  const role = roles.Claimer;
+  const nextSerial = role.nextSerial();
   const memory = {
-    role: Claimer,
+    role,
     working: false,
     serial: nextSerial,
     target,
   };
-  return this.spawnCreep(Claimer.body, `${Claimer.name}${nextSerial}`, { memory });
+  return this.spawnCreep(role.body, `${role.name}${nextSerial}`, { memory });
 };
 
 // newCreep
 // -- keeping this around for easy console use
 StructureSpawn.prototype.newCreep = function newCreep(role, theBody) {
   const body = theBody || role.body;
-  const nextSerial = Role.nextSerial(role);
+  const nextSerial = role.nextSerial();
   const memory = {
     role,
     working: false,

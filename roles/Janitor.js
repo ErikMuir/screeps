@@ -2,6 +2,7 @@ const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Lorry = require('./Lorry');
 const Logger = require('../utils/Logger');
+const filters = require('../utils/filters');
 
 const name = 'Janitor';
 const type = RoleType.Specialized;
@@ -53,7 +54,7 @@ module.exports = class Janitor extends Role {
     }
 
     if (!creep.memory.working) {
-      const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType === RESOURCE_ENERGY });
+      const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: filters.resourceEnergyFilter });
       if (droppedEnergy) {
         if (creep.pickup(droppedEnergy) === ERR_NOT_IN_RANGE) {
           creep.moveTo(droppedEnergy);
@@ -64,12 +65,8 @@ module.exports = class Janitor extends Role {
         Lorry.run(creep);
       }
     } else {
-      const structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: s => (s.structureType === STRUCTURE_SPAWN
-          || s.structureType === STRUCTURE_EXTENSION
-          || s.structureType === STRUCTURE_TOWER)
-          && s.energy < s.energyCapacity,
-      }) || creep.room.storage;
+      const structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: filters.couldUseEnergy })
+        || creep.room.storage;
 
       if (structure) {
         if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
