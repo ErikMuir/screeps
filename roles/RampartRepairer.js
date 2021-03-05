@@ -1,6 +1,7 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Repairer = require('./Repairer');
+const helpers = require('../utils/helpers');
 
 const name = 'RampartRepairer';
 const type = RoleType.Seconadry;
@@ -55,7 +56,7 @@ module.exports = class RampartRepairer extends Role {
       creep.getEnergy(['container', 'source', 'storage']);
     } else {
       let target;
-      const ramparts = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType === STRUCTURE_RAMPART });
+      const ramparts = creep.room.find(FIND_STRUCTURES, { filter: helpers.isRampart });
 
       // loop with increasing percentages
       for (let percentage = 0.0001; percentage <= 1; percentage += 0.0001) {

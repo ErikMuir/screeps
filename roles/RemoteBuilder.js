@@ -1,6 +1,7 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Harvester = require('./Harvester');
+const helpers = require('../utils/helpers');
 const Logger = require('../utils/Logger');
 
 const name = 'RemoteBuilder';
@@ -61,7 +62,7 @@ module.exports = class RemoteBuilder extends Role {
       }
 
       // TODO : should we refactor this dropped energy thing to be an option for all remote roles until we have a concept of a remote janitor????
-      const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: r => r.resourceType === RESOURCE_ENERGY });
+      const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: helpers.isResourceEnergy });
       if (droppedEnergy) {
         if (creep.pickup(droppedEnergy) === ERR_NOT_IN_RANGE) {
           creep.moveTo(droppedEnergy);
@@ -72,11 +73,7 @@ module.exports = class RemoteBuilder extends Role {
         creep.getEnergy(['source']);
       }
     } else {
-      const constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
-        filter: cs => cs.structureType === STRUCTURE_SPAWN
-        // || cs.structureType === STRUCTURE_ROAD // TODO : should this be an optional flag?
-        ,
-      });
+      const constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, { filter: helpers.isSpawnOrRoad });
       if (constructionSite) {
         if (creep.build(constructionSite) === ERR_NOT_IN_RANGE) {
           creep.moveTo(constructionSite);

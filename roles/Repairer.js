@@ -1,6 +1,7 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Builder = require('./Builder');
+const helpers = require('../utils/helpers');
 
 const name = 'Repairer';
 const type = RoleType.Primary;
@@ -54,14 +55,7 @@ module.exports = class Repairer extends Role {
     if (!creep.memory.working) {
       creep.getEnergy(['container', 'source', 'storage']);
     } else {
-      // find closest structure with less than max hits
-      // Exclude walls because they have way too many max hits and would keep
-      // our repairers busy forever. We have to find a solution for that later.
-      const structure = creep.pos.findClosestByPath(
-        FIND_STRUCTURES,
-        { filter: s => s.hits < s.hitsMax && s.structureType !== STRUCTURE_WALL && s.structureType !== STRUCTURE_RAMPART }
-      );
-
+      const structure = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: helpers.isDamagedStructure });
       if (structure) {
         if (creep.repair(structure) === ERR_NOT_IN_RANGE) {
           creep.moveTo(structure);

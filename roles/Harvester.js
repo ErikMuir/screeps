@@ -1,6 +1,6 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
-const filters = require('../utils/filters');
+const helpers = require('../utils/helpers');
 
 const name = 'Harvester';
 const type = RoleType.Primary;
@@ -54,17 +54,8 @@ module.exports = class Harvester extends Role {
     if (!creep.memory.working) {
       creep.getEnergy(['container', 'source']);
     } else {
-      getClosestSpawnNeedingEnergy = () => creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: filters.isSpawnNeedingEnergy });
-      getClosestExtensionNeedingEnergy = () => creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: filters.isExtensionNeedingEnergy });
-      getClosestTowerNeedingEnergy = () => creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: filters.isTowerNeedingEnergy });
-      getClosestContainerNeedingEnergy = () => creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: filters.isContainerNeedingEnergy });
-      getClosestStructureNeedingEnergy = () => getClosestSpawnNeedingEnergy()
-        || getClosestExtensionNeedingEnergy()
-        || getClosestTowerNeedingEnergy()
-        || getClosestContainerNeedingEnergy() // TODO : add a flag to the role to make this optional
-        || creep.room.storage;
-
-      const structure = getClosestStructureNeedingEnergy();
+      const includeContainers = true;
+      const structure = helpers.getClosestStructureNeedingEnergy(creep, includeContainers);
       if (structure) {
         if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveTo(structure);

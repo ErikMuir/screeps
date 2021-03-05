@@ -3,7 +3,7 @@ const RoleType = require('../roles/RoleType');
 const roles = require('../roles');
 const returnCode = require('../utils/returnCode');
 const { tickMessages } = require('../utils/globals');
-const filters = require('../utils/filters');
+const helpers = require('../utils/helpers');
 const Logger = require('../utils/Logger');
 
 const primaryRoles = roles.filter(r => r.type === RoleType.Primary);
@@ -27,7 +27,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
   let name;
   let energy;
 
-  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: filters.wallTypeStructuresFilter });
+  const wallTypeStructures = this.room.find(FIND_STRUCTURES, { filter: helpers.isWallOrRampart });
   const createSecondaryRoles = wallTypeStructures.length > 0;
 
   let primaryMinimumsMet = true;
@@ -69,7 +69,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
     sources.forEach(source => {
       if (name) return;
       const sourceId = source.id;
-      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: filters.containersFilter });
+      const containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: helpers.isContainer });
       containerCount = containers.length;
 
       containers.forEach(container => {

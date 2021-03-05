@@ -1,6 +1,7 @@
 const Role = require('./Role');
 const RoleType = require('./RoleType');
 const Builder = require('./Builder');
+const helpers = require('../utils/helpers');
 
 const name = 'WallRepairer';
 const type = RoleType.Secondary;
@@ -55,7 +56,7 @@ module.exports = class WallRepairer extends Role {
       creep.getEnergy(['container', 'source']);
     } else {
       let target;
-      const walls = creep.room.find(FIND_STRUCTURES, { filter: s => s.structureType === STRUCTURE_WALL });
+      const walls = creep.room.find(FIND_STRUCTURES, { filter: helpers.isWall });
 
       // loop with increasing percentages
       for (let percentage = 0.0001; percentage <= 1; percentage += 0.0001) {

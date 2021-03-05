@@ -1,4 +1,4 @@
-﻿const filters = require('../utils/filters');
+﻿const helpers = require('../utils/helpers');
 
 Creep.prototype.runRole = function runRole() {
   this.memory.role.run(this);
@@ -34,7 +34,7 @@ Creep.prototype.getEnergyFromSource = function getEnergyFromSource() {
 };
 
 Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
-  const container = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: filters.containersWithEnergy });
+  const container = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: helpers.isContainerWithEnergy });
   if (container) {
     if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       this.moveTo(container);
@@ -44,7 +44,7 @@ Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
 };
 
 Creep.prototype.getEnergyFromStorage = function getEnergyFromStorage() {
-  const storage = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: filters.storageWithEnergy });
+  const storage = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: helpers.isStorageWithEnergy });
   if (storage) {
     if (this.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       this.moveTo(storage);
