@@ -31,20 +31,33 @@ module.exports = class RemoteBuilder extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: RemoteBuilder, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: RemoteBuilder, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: RemoteBuilder }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: RemoteBuilder, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: RemoteBuilder, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: RemoteBuilder, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: RemoteBuilder, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     // do we need to change our primary goal?
     if (creep.memory.working && creep.carry.energy === 0) {

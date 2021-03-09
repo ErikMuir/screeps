@@ -1,15 +1,24 @@
-﻿const Role = require('../roles/Role');
+﻿const roles = require('../roles');
+const Role = require('../roles/Role');
 const RoleType = require('../roles/RoleType');
-const roles = require('../roles');
-const returnCode = require('../utils/returnCode');
 const { tickMessages } = require('../utils/globals');
 const helpers = require('../utils/helpers');
 const Logger = require('../utils/Logger');
 
-const primaryRoles = roles.filter(r => r.type === RoleType.Primary);
-const secondaryRoles = roles.filter(r => r.type === RoleType.Secondary);
-const remoteRoles = roles.filter(r => r.type === RoleType.Remote);
-const specializedRoles = roles.filter(r => r.type === RoleType.Specialized);
+/** @constant {Role[]} allRoles */
+const allRoles = Object.keys(roles).map(key => roles[key]);
+
+/** @constant {Role[]} primaryRoles */
+const primaryRoles = allRoles.filter(role => role.type === RoleType.Primary);
+
+/** @constant {Role[]} secondaryRoles */
+const secondaryRoles = allRoles.filter(role => role.type === RoleType.Secondary);
+
+/** @constant {Role[]} remoteRoles */
+const remoteRoles = allRoles.filter(role => role.type === RoleType.Remote);
+
+/** @constant {Role[]} specializedRoles */
+const specializedRoles = allRoles.filter(role => role.type === RoleType.Specialized);
 
 StructureSpawn.prototype.primaryMin = undefined;
 StructureSpawn.prototype.permanentRole = undefined;
@@ -21,7 +30,10 @@ StructureSpawn.prototype.createRemoteHarvesters = false;
 StructureSpawn.prototype.createRemoteBuilders = false;
 StructureSpawn.prototype.usePercentages = false;
 
-// spawnCreepsIfNecessary
+/**
+ * @function spawnCreepsIfNecessary
+ * @returns {undefined}
+ */
 StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessary() {
   const room = this.room.name;
   let name;
@@ -162,12 +174,17 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function spawnCreepsIfNecessar
     Logger.info(tickMessages[this.name]);
     Logger.info(this.roleStatus());
   } else if (name) {
-    tickMessages[this.name] += returnCode(name);
+    tickMessages[this.name] += helpers.returnCode(name);
     Logger.info(tickMessages[this.name]);
   }
 };
 
-// createCustomCreep
+/**
+ * @function createCustomCreep
+ * @param {Number} energy
+ * @param {Role} role
+ * @returns {ScreepsReturnCode}
+ */
 StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, role) {
   switch (role) {
     case roles.Lorry:
@@ -199,7 +216,11 @@ StructureSpawn.prototype.createCustomCreep = function createCustomCreep(energy, 
   return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
-// createLorry
+/**
+ * @function createLorry
+ * @param {Number} energy
+ * @returns {ScreepsReturnCode}
+ */
 StructureSpawn.prototype.createLorry = function createLorry(energy) {
   const role = roles.Lorry;
   const body = [];
@@ -223,7 +244,11 @@ StructureSpawn.prototype.createLorry = function createLorry(energy) {
   return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
-// createJanitor
+/**
+ * @function createJanitor
+ * @param {Number} energy
+ * @returns {ScreepsReturnCode}
+ */
 StructureSpawn.prototype.createJanitor = function createJanitor(energy) {
   const role = roles.Janitor;
   const body = [];
@@ -247,7 +272,11 @@ StructureSpawn.prototype.createJanitor = function createJanitor(energy) {
   return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
-// createAttacker
+/**
+ * @function createAttacker
+ * @param {Number} energy
+ * @returns {ScreepsReturnCode}
+ */
 StructureSpawn.prototype.createAttacker = function createAttacker(energy) {
   const role = roles.Attacker;
   const body = [];
@@ -271,7 +300,13 @@ StructureSpawn.prototype.createAttacker = function createAttacker(energy) {
   return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
-// createMiner
+/**
+ * @function createMiner
+ * @param {Object} params
+ * @param {string} params.sourceId
+ * @param {string} params.containerId
+ * @returns {ScreepsReturnCode}
+ */
 StructureSpawn.prototype.createMiner = function createMiner({ sourceId, containerId }) {
   const role = roles.Miner;
   const nextSerial = role.nextSerial();
@@ -285,7 +320,11 @@ StructureSpawn.prototype.createMiner = function createMiner({ sourceId, containe
   return this.spawnCreep(role.body, `${role.name}${nextSerial}`, { memory });
 };
 
-// createClaimer
+/**
+ * @function createClaimer
+ * @param {string} target
+ * @returns {ScreepsReturnCode}
+ * */
 StructureSpawn.prototype.createClaimer = function createClaimer(target) {
   const role = roles.Claimer;
   const nextSerial = role.nextSerial();
@@ -298,8 +337,12 @@ StructureSpawn.prototype.createClaimer = function createClaimer(target) {
   return this.spawnCreep(role.body, `${role.name}${nextSerial}`, { memory });
 };
 
-// newCreep
-// -- keeping this around for easy console use
+/**
+ * @function newCreep - keeping this around for easy console use
+ * @param {Role} role
+ * @param {BodyPartConstant[]} theBody
+ * @returns {ScreepsReturnCode}
+ * */
 StructureSpawn.prototype.newCreep = function newCreep(role, theBody) {
   const body = theBody || role.body;
   const nextSerial = role.nextSerial();
@@ -311,7 +354,11 @@ StructureSpawn.prototype.newCreep = function newCreep(role, theBody) {
   return this.spawnCreep(body, `${role.name}${nextSerial}`, { memory });
 };
 
-// roleStatus
+/**
+ * @function roleStatus
+ * @param {Role} role
+ * @returns {String}
+ * */
 StructureSpawn.prototype.roleStatus = function roleStatus(role) {
   const separater = ' | ';
   const theRoles = role ? [role] : [...primaryRoles, ...secondaryRoles, ...remoteRoles, ...specializedRoles];
@@ -320,7 +367,10 @@ StructureSpawn.prototype.roleStatus = function roleStatus(role) {
   return status;
 };
 
-// avgCreepSize
+/**
+ * @function avgCreepSize
+ * @returns {Number}
+ * */
 StructureSpawn.prototype.avgCreepSize = function avgCreepSize() {
   let totalSize = 0;
   const creeps = Object.keys(Game.creeps).map(key => Game.creeps[key]);
@@ -332,7 +382,10 @@ StructureSpawn.prototype.avgCreepSize = function avgCreepSize() {
   return `Average creep size: ${Math.floor(totalSize / creeps.length)}`;
 };
 
-// energyStatus
+/**
+ * @function energyStatus
+ * @returns {undefined}
+ * */
 StructureSpawn.prototype.energyStatus = function energyStatus() {
   const level = this.room.energyAvailable;
   const capacity = this.room.energyCapacityAvailable;

@@ -1,9 +1,18 @@
 ﻿const helpers = require('../utils/helpers');
 
+/**
+ * @function runRole
+ * @returns {undefined}
+ */
 Creep.prototype.runRole = function runRole() {
   this.memory.role.run(this);
 };
 
+/**
+ * @function getEnergy
+ * @param {String[]} sources
+ * @returns {Boolean}
+ * */
 Creep.prototype.getEnergy = function getEnergy(sources) {
   const theSources = sources || ['source'];
   let success = false;
@@ -25,6 +34,10 @@ Creep.prototype.getEnergy = function getEnergy(sources) {
   });
 };
 
+/**
+ * @function getEnergyFromSource
+ * @returns {Boolean}
+ */
 Creep.prototype.getEnergyFromSource = function getEnergyFromSource() {
   const source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
   if (this.harvest(source) === ERR_NOT_IN_RANGE) {
@@ -33,6 +46,10 @@ Creep.prototype.getEnergyFromSource = function getEnergyFromSource() {
   return true;
 };
 
+/**
+ * @function getEnergyFromContainer
+ * @returns {Boolean}
+ */
 Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
   const container = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: helpers.isContainerWithEnergy });
   if (container) {
@@ -43,6 +60,10 @@ Creep.prototype.getEnergyFromContainer = function getEnergyFromContainer() {
   return !!container;
 };
 
+/**
+ * @function getEnergyFromStorage
+ * @returns {Boolean}
+ */
 Creep.prototype.getEnergyFromStorage = function getEnergyFromStorage() {
   const storage = this.pos.findClosestByPath(FIND_STRUCTURES, { filter: helpers.isStorageWithEnergy });
   if (storage) {

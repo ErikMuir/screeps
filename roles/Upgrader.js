@@ -28,20 +28,33 @@ module.exports = class Upgrader extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: Upgrader, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: Upgrader, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: Upgrader }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: Upgrader, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: Upgrader, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Upgrader, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Upgrader, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     if (creep.memory.target && creep.memory.target !== creep.room.name) {
       const exit = creep.room.findExitTo(creep.memory.target);

@@ -29,20 +29,33 @@ module.exports = class Builder extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: Builder, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: Builder, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: Builder }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: Builder, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: Builder, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Builder, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Builder, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     // do we need to change our primary goal?
     if (creep.memory.working && creep.carry.energy === 0) {

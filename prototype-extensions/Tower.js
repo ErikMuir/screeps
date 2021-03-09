@@ -1,6 +1,10 @@
 ﻿const Logger = require('../utils/Logger');
 const helpers = require('../utils/helpers');
 
+/**
+ * @function defend
+ * @returns {undefined}
+ */
 StructureTower.prototype.defend = function defend() {
   // number one priority is to attack hostile creeps
   const target = this.pos.findClosestByRange(FIND_HOSTILE_CREEPS);

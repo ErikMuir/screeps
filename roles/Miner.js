@@ -29,20 +29,33 @@ module.exports = class Miner extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: Miner, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: Miner, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: Miner }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: Miner, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: Miner, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Miner, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Miner, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     // get source
     const source = Game.getObjectById(creep.memory.sourceId);

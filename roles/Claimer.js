@@ -28,20 +28,33 @@ module.exports = class Claimer extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: Claimer, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: Claimer, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: Claimer }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: Claimer, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: Claimer, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Claimer, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Claimer, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     if (creep.room.name !== creep.memory.target) {
       const exit = creep.room.findExitTo(creep.memory.target);

@@ -30,20 +30,33 @@ module.exports = class RampartRepairer extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: RampartRepairer, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: RampartRepairer, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: RampartRepairer }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: RampartRepairer, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: RampartRepairer, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: RampartRepairer, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: RampartRepairer, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     // do we need to change our primary goal?
     if (creep.memory.working && creep.carry.energy === 0) {

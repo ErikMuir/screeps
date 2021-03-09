@@ -29,20 +29,33 @@ module.exports = class Harvester extends Role {
     return ratio;
   }
 
+  /** @param {Room} room */
   static getCount(room) { return Role.count({ role: Harvester, room }); }
 
+  /** @param {Room} room */
   static getCreeps(room) { return Role.getCreeps({ role: Harvester, room }); }
 
   static nextSerial() { return Role.nextSerial({ role: Harvester }); }
 
+  /** @param {Room} room */
   static getStatus(room) { return Role.getStatus({ role: Harvester, room }); }
 
+  /** @param {Room} room */
   static getPercentage(room) { return Role.getPercentage({ role: Harvester, room }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} percOverride
+   * */
   static lessThanPerc(room, percOverride) { return Role.lessThanPerc({ role: Harvester, room, percOverride }); }
 
+  /**
+   * @param {Room} room
+   * @param {Number} minOverride
+   * */
   static lessThanMin(room, minOverride) { return Role.lessThanMin({ role: Harvester, room, minOverride }); }
 
+  /** @param {Creep} creep */
   static run(creep) {
     // do we need to change our primary goal?
     if (creep.memory.working && creep.carry.energy === 0) {

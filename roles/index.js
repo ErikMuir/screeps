@@ -12,7 +12,7 @@ const Attacker = require('./Attacker');
 const Miner = require('./Miner');
 const Lorry = require('./Lorry');
 
-module.exports = [
+module.exports = {
   Harvester,
   Upgrader,
   Builder,
@@ -26,4 +26,4 @@ module.exports = [
   Attacker,
   Miner,
   Lorry,
-];
+};
